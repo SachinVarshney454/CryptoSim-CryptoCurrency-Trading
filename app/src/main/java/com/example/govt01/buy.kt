@@ -58,35 +58,32 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.flow.merge
 import retrofit2.Callback
 
-class buy :ComponentActivity(){
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            enableEdgeToEdge()
-            setContent {
-                Govt01Theme {
-                    var name=intent.getStringExtra("name")
-
-                    var price=intent.getStringExtra("price".toString())
-                    var sym=intent.getStringExtra("symbol")
-                    var change = intent.getStringExtra("change").toString()
-                    var market=intent.getStringExtra("market").toString()
-                    Buy(name?:"not",price?:"05435",sym?:"",change?:"0",market?:"0")
-
-
-                }
+class buy : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            Govt01Theme {
+                var name = intent.getStringExtra("name")
+                var price = intent.getStringExtra("price".toString())
+                var sym = intent.getStringExtra("symbol")
+                var change = intent.getStringExtra("change").toString()
+                var market = intent.getStringExtra("market").toString()
+                Buy(name ?: "not", price ?: "05435", sym ?: "", change ?: "0", market ?: "0")
             }
         }
     }
+}
+
 @Composable
 fun Buy(name: String, price: String, symbol: String, change: String, market: String) {
     val cryptoPrice = price
     val cryptoName = name
     val context = LocalContext.current
 
-
     var investedAmount by remember { mutableStateOf("Loading...") }
 
-    // Fetch invested amount
+    // Fetch invested amount from Firestore
     LaunchedEffect(Unit) {
         getpurchaseinfo(context, cryptoName) {
             investedAmount = it
@@ -102,18 +99,25 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
 
     Column(
         modifier = Modifier
-            .fillMaxSize().background(Color(0xFFFAF3E0))
+            .fillMaxSize()
+            .background(Color(0xFFFAF3E0))
             .verticalScroll(rememberScrollState())
-            .padding(16.dp).padding(top=55.dp)
+            .padding(16.dp)
+            .padding(top = 55.dp)
     ) {
         Text(
             text = cryptoName,
-            color = Color.White, fontWeight = FontWeight.Bold,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth().height(50.dp).clip(
-                RoundedCornerShape(18.dp)).background(Color(0xFF1E1E2C)).padding(start = 23.dp, top = 12.dp)
-            ,textAlign = TextAlign.Center,
-
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth()
+                .height(50.dp)
+                .clip(RoundedCornerShape(18.dp))
+                .background(Color(0xFF1E1E2C))
+                .padding(start = 23.dp, top = 12.dp),
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(0.dp))
@@ -121,7 +125,6 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
         CryptoChartPlaceholder(cryptoName.toLowerCase())
 
         Spacer(modifier = Modifier.height(24.dp))
-
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -140,10 +143,12 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
                         .padding(12.dp)
                 ) {
                     Text(text = item.first, fontSize = 14.sp, color = Color.LightGray)
-                    val valueColor = if (item.second.isDigitsOnly() && item.second.toFloat() > 0) Color.Green else Color.Red
-                    val displayText = if (item.first == "Current Value") "$${item.second}" else item.second
+                    val valueColor =
+                        if (item.second.isDigitsOnly() && item.second.toFloat() > 0) Color.Green else Color.Red
+                    val displayText =
+                        if (item.first == "Current Value") "$${item.second}" else item.second
                     Text(
-                        text = (displayText),
+                        text = displayText,
                         color = if (item.first == "Current Value") Color.White else Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
@@ -151,51 +156,21 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
                 }
             }
         }
-//        dbdetail(cryptoName) { list ->
-//            val data = listOf(
-//                "Average price" to list[0],
-//                "Total Crypto" to list[1]
-//            )
-//        }
-//        LazyVerticalGrid(
-//            columns = GridCells.Fixed(2),
-//            modifier = Modifier.height(90.dp)
-//                   , verticalArrangement = Arrangement.spacedBy(8.dp),
-//                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-//            contentPadding = PaddingValues(horizontal = 8.dp)
-//        ) {
-//            items() { item->
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .background(Color(0xFF1E1E1E), RoundedCornerShape(8.dp))
-//                        .padding(12.dp)
-//
-//                ) {
-//                    Text(text = item.first, fontSize = 14.sp, color = Color.LightGray)
-//                    Text(
-//                        text = item.second,
-//                        fontSize = 16.sp,
-//                        color = Color.White,
-//                        fontWeight = FontWeight.SemiBold
-//                    )
-//                }
-//            }
-//        }
 
         Spacer(modifier = Modifier.height(0.dp))
         var cryptoAmount by remember { mutableStateOf("") }
-        var value by remember  { mutableStateOf("0")}
+        var value by remember { mutableStateOf("0") }
 
         OutlinedTextField(
             value = cryptoAmount,
-            onValueChange = { cryptoAmount = it
-                if(cryptoAmount.equals("")){}
-               else {
+            onValueChange = {
+                cryptoAmount = it
+                if (cryptoAmount.equals("")) {
+                } else {
                     var temp = 1 / price.toDouble()
-                    value = String.format("%.4f",cryptoAmount.toDouble() * temp)
+                    value = String.format("%.4f", cryptoAmount.toDouble() * temp)
                 }
-                            },
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -205,7 +180,6 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
                 .fillMaxWidth()
                 .background(Color(0xFF1E1E1E), RoundedCornerShape(8.dp))
                 .padding(12.dp)
-
         ) {
             Text(text = "Amount of Crypto", fontSize = 14.sp, color = Color.LightGray)
             Text(
@@ -220,10 +194,9 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
 
         LaunchedEffect(cryptoName) {
             specificcrypto(cryptoName) { list ->
-                 cryptoown.value = list.get(0)
-                 assetvalue.value = list.get(1)
+                cryptoown.value = list.get(0)
+                assetvalue.value = list.get(1)
             }
-
         }
         val list = listOf(
             "Crypto you own" to cryptoown,
@@ -232,20 +205,21 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
-                .fillMaxWidth().padding(top=15.dp)
+                .fillMaxWidth()
+                .padding(top = 15.dp)
                 .height(90.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 8.dp)
         ) {
-            items(list){item->
+            items(list) { item ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color(0xFF1E1E1E), RoundedCornerShape(8.dp))
                         .padding(12.dp)
                 ) {
-                    Text(text =item.first, fontSize = 14.sp, color = Color.LightGray)
+                    Text(text = item.first, fontSize = 14.sp, color = Color.LightGray)
                     Text(
                         text = item.second.toString(),
                         color = Color.White,
@@ -256,19 +230,16 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
             }
         }
 
-
-
-
         Spacer(modifier = Modifier.height(6.dp))
 
-        // Buy / Sell buttons
+        // Buy / Sell action buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
                 onClick = {
-//                   sell()
+                    // sell()
                 },
                 modifier = Modifier.weight(1F),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
@@ -279,7 +250,7 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
 
             Button(
                 onClick = {
-                    cryptobuy(context, name, price, cryptoAmount,value.toString())
+                    cryptobuy(context, name, price, cryptoAmount, value.toString())
                 },
                 modifier = Modifier.weight(1F),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
@@ -292,79 +263,86 @@ fun Buy(name: String, price: String, symbol: String, change: String, market: Str
         Spacer(modifier = Modifier.height(40.dp)) // Bottom spacing
     }
 }
-fun cryptobuy(context: Context,cryptoname:String,price: String,current: String,numberofcrypto:String){
-    val fb=FirebaseAuth.getInstance().currentUser?:null
-//    val context= LocalContext.current
-    val email=fb?.email
-    val db=FirebaseFirestore.getInstance()
-    if(email==null){
-//        Toast.makeText(, "", Toast.LENGTH_SHORT).show()
+
+fun cryptobuy(
+    context: Context,
+    cryptoname: String,
+    price: String,
+    current: String,
+    numberofcrypto: String
+) {
+    val fb = FirebaseAuth.getInstance().currentUser ?: null
+    val email = fb?.email
+    val db = FirebaseFirestore.getInstance()
+    if (email == null) {
         return
     }
     db.collection("data").document(email).collection("purchase").document(cryptoname)
-        .get().addOnSuccessListener { task->
-            if(!task.exists()){
-                createdata(email,cryptoname,price, current ,numberofcrypto)
-            }
-            else{
-                getdata(email,cryptoname,numberofcrypto,current,price)
-
-
+        .get().addOnSuccessListener { task ->
+            if (!task.exists()) {
+                createdata(email, cryptoname, price, current, numberofcrypto)
+            } else {
+                getdata(email, cryptoname, numberofcrypto, current, price)
             }
         }
 }
-fun getdata(email: String,cryptoname: String,quantity: String,currmoney:String,currenttradingprice:String ){
-    val db=FirebaseFirestore.getInstance()
+
+fun getdata(
+    email: String,
+    cryptoname: String,
+    quantity: String,
+    currmoney: String,
+    currenttradingprice: String
+) {
+    val db = FirebaseFirestore.getInstance()
     var money = "0"
-    var quant="0"
+    var quant = "0"
     db.collection("data").document(email).collection("purchase").document(cryptoname)
         .get()
-        .addOnSuccessListener { task->
+        .addOnSuccessListener { task ->
+            money = task.get("totalmoneyspent").toString()
+            quant = task.get("totalquantity").toString()
+            val tradingprice = task.get("averagetradingprice").toString()
+            val totalmoney = money.toFloat() + currmoney.toFloat()
+            val totalquantity = quant.toFloat() + quantity.toFloat()
+            val averagetradingprice = (tradingprice.toFloat() + currenttradingprice.toFloat()) / 2
 
-             money=task.get("totalmoneyspent").toString()
-             quant= task.get("totalquantity").toString()
-            val tradingprice=task.get("averagetradingprice").toString()
-            val totalmoney=money.toFloat()+currmoney.toFloat()
-            val totalquantity= quant.toFloat()+quantity.toFloat()
-            val averagetradingprice= (tradingprice.toFloat()+currenttradingprice.toFloat())/2;
-
-            val fb=FirebaseAuth.getInstance().currentUser?:null
-            val data= mapOf(
+            val fb = FirebaseAuth.getInstance().currentUser ?: null
+            val data = mapOf(
                 "totalmoneyspent" to totalmoney,
-                "totalquantity" to String.format("%.4f",totalquantity),
+                "totalquantity" to String.format("%.4f", totalquantity),
                 "averagetradingprice" to averagetradingprice
             )
             db.collection("data").document(email).collection("purchase").document(cryptoname)
                 .set(data, SetOptions.merge())
                 .addOnSuccessListener {
-
                 }
         }
-    Log.d("quantity",quant)
-
-
-
-
-
+    Log.d("quantity", quant)
 }
-fun createdata(email:String,cryptoname: String,price: String,current:String,quantity:String){
-    val fb=FirebaseAuth.getInstance().currentUser?:null
-    val data= mapOf(
+
+fun createdata(
+    email: String,
+    cryptoname: String,
+    price: String,
+    current: String,
+    quantity: String
+) {
+    val fb = FirebaseAuth.getInstance().currentUser ?: null
+    val data = mapOf(
         "name" to cryptoname,
         "totalquantity" to quantity,
         "totalmoneyspent" to current,
         "averagetradingprice" to price
     )
 
-
-    val db=FirebaseFirestore.getInstance()
+    val db = FirebaseFirestore.getInstance()
     db.collection("data").document(email).collection("purchase").document(cryptoname)
         .set(data)
         .addOnSuccessListener {
-
         }
-
 }
+
 fun getpurchaseinfo(context: Context, name: String, callback: (String) -> Unit) {
     val email = FirebaseAuth.getInstance().currentUser?.email ?: return callback("Not logged in")
     val db = FirebaseFirestore.getInstance()
@@ -383,6 +361,7 @@ fun getpurchaseinfo(context: Context, name: String, callback: (String) -> Unit) 
             callback("Error loading")
         }
 }
+
 fun dbdetail(name: String, onResult: (List<String>) -> Unit) {
     val db = FirebaseFirestore.getInstance()
     val email = FirebaseAuth.getInstance().currentUser?.email
@@ -406,7 +385,8 @@ fun dbdetail(name: String, onResult: (List<String>) -> Unit) {
             onResult(listOf("0.0000", "0.0000"))
         }
 }
-fun specificcrypto(name:String,onResult: (List<String>) -> Unit){
+
+fun specificcrypto(name: String, onResult: (List<String>) -> Unit) {
     val db = FirebaseFirestore.getInstance()
     val email = FirebaseAuth.getInstance().currentUser?.email
 
@@ -414,19 +394,18 @@ fun specificcrypto(name:String,onResult: (List<String>) -> Unit){
         .get()
         .addOnSuccessListener { task ->
             if (task.exists()) {
-                val cryptoown= task.get("totalquantity").toString()
-                val averagetradingprice=task.get("averagetradingprice").toString()
-                val assetvalue=cryptoown.toFloat()*averagetradingprice.toFloat()
-                 onResult(listOf(cryptoown.toString(),assetvalue.toString()))
+                val cryptoown = task.get("totalquantity").toString()
+                val averagetradingprice = task.get("averagetradingprice").toString()
+                val assetvalue = cryptoown.toFloat() * averagetradingprice.toFloat()
+                onResult(listOf(cryptoown.toString(), assetvalue.toString()))
             }
-
-            }
-
+        }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun buypre(){
+fun buypre() {
     Govt01Theme {
-        Buy("0","0","0","0","0")
+        Buy("0", "0", "0", "0", "0")
     }
 }

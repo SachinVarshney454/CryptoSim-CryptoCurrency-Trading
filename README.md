@@ -1,6 +1,6 @@
-Crypto Trading App
+CryptoSim – Cryptocurrency Trading
 
-A modern cryptocurrency trading simulation app built using Jetpack Compose and Kotlin. This application allows users to trade popular cryptocurrencies using demo money, track portfolio performance, and visualize price trends using interactive charts. Firebase handles user authentication and real-time data sync, while Retrofit is used to fetch live market data via a prebuilt API integration.
+A cryptocurrency trading simulation app built with Jetpack Compose and Kotlin. This application allows users to trade popular cryptocurrencies using demo money, track portfolio performance, and visualize price trends using interactive charts. Firebase handles user authentication and real-time data sync, while Retrofit is used to fetch live market data via a prebuilt API integration.
 
 ⸻
 

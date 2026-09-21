@@ -1,4 +1,5 @@
 package com.example.govt01
+
 import android.content.Context
 import com.example.govt01.Authentication.Login
 import android.content.Intent
@@ -15,13 +16,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.navigation.compose.NavHost
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
-
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -78,7 +75,6 @@ import com.example.govt01.PRICERETRO.Coins
 import com.example.govt01.PRICERETRO.Inter
 import com.example.govt01.PRICERETRO.Retroins
 import com.example.govt01.PRICERETRO.Ticket
-
 import com.example.govt01.chart.RETROAPI
 import com.example.govt01.ui.theme.Govt01Theme
 import com.github.mikephil.charting.charts.LineChart
@@ -98,17 +94,15 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Govt01Theme {
-                val navcontroller= rememberNavController();
-                NavHost(navcontroller);
-//                  bitcoin()
-
+                val navController = rememberNavController()
+                NavHost(navController)
+                // bitcoin()
             }
         }
     }
@@ -221,7 +215,7 @@ fun BitcoinLineChart(dataPoints: List<Pair<Long, Double>>) {
 
 @Composable
 fun home(navController: NavHostController) {
-
+    // Main home screen with top cryptos and portfolio summary
     Scaffold(
         containerColor = Color.Black,
         bottomBar = { Row(
@@ -534,7 +528,7 @@ fun setting(navController: NavHostController) {
                     .fillMaxWidth()
                     .height(250.dp)
             )
-            Text(text="Developed By Sachin Varshney", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = Color.Red)
+            Text(text = "Developed by Sachin Varshney", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = Color.Red)
             
 
             listOf(
