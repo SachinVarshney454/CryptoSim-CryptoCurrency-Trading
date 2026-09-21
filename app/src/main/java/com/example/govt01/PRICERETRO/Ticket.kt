@@ -1,10 +1,12 @@
 package com.example.govt01.PRICERETRO
+// Ticket data class
 
-data class Ticket(  val id: String,
-                    val name: String,
-                    val symbol: String,
-                    val rank: Int,
-                    val quotes: Map<String, Quote>
+data class Ticket(
+    val id: String,
+    val name: String,
+    val symbol: String,
+    val rank: Int,
+    val quotes: Map<String, Quote>
 )
 
 data class Quote(

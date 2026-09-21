@@ -33,7 +33,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
-class Signup:ComponentActivity(){
+class Signup : ComponentActivity() {
+    // Signup activity entry point
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

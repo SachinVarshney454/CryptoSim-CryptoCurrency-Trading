@@ -1,4 +1,5 @@
 package com.example.govt01.chart
+// Chart data model
 
 data class CHARTDATA(
 //    val prices: List<List<Double>>,

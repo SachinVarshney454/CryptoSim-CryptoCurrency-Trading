@@ -1,4 +1,5 @@
 package com.example.govt01.ui.theme
+// App color definitions
 
 import androidx.compose.ui.graphics.Color
 

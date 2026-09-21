@@ -1,4 +1,5 @@
 package com.example.govt01.ui.theme
+// App theme setup
 
 import android.app.Activity
 import android.os.Build

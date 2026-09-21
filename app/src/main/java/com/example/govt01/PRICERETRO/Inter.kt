@@ -1,4 +1,5 @@
 package com.example.govt01.PRICERETRO
+// API interface for price data
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

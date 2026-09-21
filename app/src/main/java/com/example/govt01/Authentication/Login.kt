@@ -50,12 +50,13 @@ import com.example.govt01.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.math.log
 class Login : ComponentActivity() {
-    public val auth = FirebaseAuth.getInstance()
+    // Login activity entry point
+    val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context= LocalContext.current
+            val context = LocalContext.current
             val user= FirebaseAuth.getInstance().currentUser
             if(user!=null){
             val intent= Intent(context,MainActivity::class.java)
@@ -123,7 +124,7 @@ fun Login1(
 //            )
 //            Text("Remember Me")
 //        }
-        val context= LocalContext.current
+        val context = LocalContext.current
         Button(
             onClick = { login(username, password,context) },
             modifier = Modifier.fillMaxWidth()
